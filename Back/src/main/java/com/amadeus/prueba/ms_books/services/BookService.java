@@ -83,7 +83,7 @@ public class BookService {
         book.setTitle(bookRequest.getTitle());
         book.setDescription(bookRequest.getDescription());
         book.setISBN(bookRequest.getISBN());
-        book.setAuthor(book.getAuthor());
+        book.setAuthor(bookRequest.getAuthor());
         book = bookRepository.save(book);
         BookResponse response = new BookResponse(book);
         return new GeneralResponse<>(
@@ -114,6 +114,7 @@ public class BookService {
         );
     }
 
+    @Transactional
     public GeneralResponse<?> deleteBook(Long bookId) {
         Book book = bookRepository.findByIdC(bookId);
         if (book != null){

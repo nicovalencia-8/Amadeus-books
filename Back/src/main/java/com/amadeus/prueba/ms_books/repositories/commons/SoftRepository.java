@@ -23,7 +23,7 @@ public interface SoftRepository<T> extends JpaRepository<T, Long> {
     Page<T> findAllC(Pageable pageable);
 
     @Modifying
-    @Query("UPDATE #{#entityName} e SET e.deleted = false WHERE e.id = :id")
+    @Query("UPDATE #{#entityName} e SET e.deleted = true WHERE e.id = :id")
     void softDelete(@Param("id") Long id);
 
 }

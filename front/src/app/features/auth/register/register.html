@@ -3,7 +3,7 @@
     <mat-card-title>Formulario de registro</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <form class="form" [formGroup]="form">
+    <form class="form" [formGroup]="form" (ngSubmit)="onRegister()">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Nombre</mat-label>
         <input matInput placeholder="Ej. Pedro" formControlName="name" required>
@@ -54,8 +54,11 @@
           {{ getErrorMessage('password') }}
         </mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" [disabled]="form.invalid">Registrarse</button>
+      <button mat-raised-button color="primary" [disabled]="form.invalid  || loading">
+        {{ loading ? 'Registrando...' : 'Registrarse' }}
+      </button>
     </form>
+    <mat-error *ngIf="apiError">{{ apiError }}</mat-error>
     <br><br>
     <hr>
     <div style="text-align: center; margin-top: 12px;">

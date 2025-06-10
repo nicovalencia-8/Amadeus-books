@@ -7,6 +7,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -25,12 +26,17 @@ export class Register {
 
   readonly form: FormGroup;
   hide = signal(true);
+  loading = false;
+  apiError = '';
+
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(private fb: FormBuilder,
+              private router: Router,
+              private http: HttpClient) {
     this.form = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required]],
@@ -57,6 +63,32 @@ export class Register {
 
   goToLogin() {
     this.router.navigate(['/login']);
+  }
+
+  onRegister(){
+    if(this.form.invalid) return;
+    this.loading = true;
+    this.apiError = '';
+
+    const payload = {
+      firstName: this.form.value.name,
+      lastName: this.form.value.lastname,
+      username: this.form.value.username,
+      password: this.form.value.password,
+      email: this.form.value.email
+    };
+
+    this.http.post<any>('http://localhost:5227/users/create', payload)
+    .subscribe({
+      next: (resp) => {
+        this.loading = false;
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.loading = false;
+        this.apiError = 'Hubo un error al rgistrarse. Untenta nuevamente'
+      }
+    });
   }
 
 }

@@ -1,1 +1,41 @@
-<p>books-register works!</p>
+<mat-card class="card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Crear Libro</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form class="form" [formGroup]="form" (ngSubmit)="onCreate()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Titulo</mat-label>
+        <input matInput placeholder="Ej. El señor de los anillos" formControlName="title" required>
+        <mat-error *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+          {{ getErrorMessage('title') }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <input matInput placeholder="Ej. Libro de aventuras" formControlName="description" required>
+        <mat-error *ngIf="form.get('description')?.invalid && form.get('description')?.touched">
+          {{ getErrorMessage('description') }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Author</mat-label>
+        <input matInput placeholder="Ej. J. R. R. Tolkien" formControlName="author" required>
+        <mat-error *ngIf="form.get('author')?.invalid && form.get('author')?.touched">
+          {{ getErrorMessage('author') }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>ISBN</mat-label>
+        <input matInput placeholder="Ej. 9788845292613" formControlName="isbn" required>
+        <mat-error *ngIf="form.get('isbn')?.invalid && form.get('isbn')?.touched">
+          {{ getErrorMessage('isbn') }}
+        </mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="form.invalid  || loading">
+        {{ loading ? 'Creando...' : 'Crear' }}
+      </button>
+    </form>
+    <mat-error *ngIf="apiError">{{ apiError }}</mat-error>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,16 @@
+server:
+  port: ${PORT:5227}
+spring:
+  application:
+    name: ms-books
+  datasource:
+    url: jdbc:postgresql://localhost:5433/booksdb
+    username: msbooks
+    password: 4m4d3u$t3$t
+  jpa:
+    hibernate:
+      ddl-auto: update
+jwt:
+  secret: 'C@ao}k74M0OJ77#*m_-sYT5Xa+2|i5gh'
+  expire: 3600
+  refreshExpire: 86400

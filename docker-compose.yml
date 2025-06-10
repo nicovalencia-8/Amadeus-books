@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: bitnami/postgresql:latest
+    container_name: PostgresSQLAmadeus
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres123
+      - POSTGRESQL_DATABASE=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/bitnami/postgresql
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+volumes:
+  pg_data:

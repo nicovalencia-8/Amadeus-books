@@ -4,6 +4,8 @@ import com.amadeus.prueba.ms_books.configs.JwtUtil;
 import com.amadeus.prueba.ms_books.controllers.request.AuthRequest;
 import com.amadeus.prueba.ms_books.controllers.request.CreateUserRequest;
 import com.amadeus.prueba.ms_books.controllers.response.AuthResponse;
+import com.amadeus.prueba.ms_books.controllers.response.CreateUserResponse;
+import com.amadeus.prueba.ms_books.controllers.response.commons.GeneralResponse;
 import com.amadeus.prueba.ms_books.domains.User;
 import com.amadeus.prueba.ms_books.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +35,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public AuthResponse auth(AuthRequest request){
+    public GeneralResponse<AuthResponse> auth(AuthRequest request){
         if(request.getType().equals("authorization")){
             if(authenticate(request.getUser(), request.getPassword())){
                 return getToken(request);
@@ -55,23 +57,35 @@ public class AuthService {
         }
     }
 
-    private AuthResponse getToken(AuthRequest request){
+    private GeneralResponse<AuthResponse> getToken(AuthRequest request){
         String token = jwtUtil.generateAccessToken(request.getUser());
         String refreshToken = jwtUtil.generateRefreshToken(request.getUser());
-        return new AuthResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), "OK", token, refreshToken, EXPIRE_TIME);
+        AuthResponse auth = new AuthResponse(token, refreshToken, EXPIRE_TIME);
+        return new GeneralResponse<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                "Token generado correctamente",
+                auth
+                );
     }
 
-    private AuthResponse refreshToken(AuthRequest request){
+    private GeneralResponse<AuthResponse> refreshToken(AuthRequest request){
         if(jwtUtil.isRefreshTokenValid(request.getRefreshToken())){
             String username = jwtUtil.getUsernameFromToken(request.getRefreshToken());
             String token = jwtUtil.generateAccessToken(username);
             String refreshToken = jwtUtil.generateRefreshToken(username);
-            return new AuthResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), "OK", token, refreshToken, REFRESH_EXPIRE_TIME);
+            AuthResponse auth = new AuthResponse(token, refreshToken, REFRESH_EXPIRE_TIME);
+            return new GeneralResponse<>(
+                    HttpStatus.OK.value(),
+                    HttpStatus.OK.getReasonPhrase(),
+                    "Token generado correctamente",
+                    auth
+            );
         }
         throw new IllegalArgumentException("Refresh token inválido");
     }
 
-    public void createUser(CreateUserRequest request){
+    public GeneralResponse<CreateUserResponse> createUser(CreateUserRequest request){
         String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = new User();
         user.setFirstName(request.getFirstName());
@@ -79,7 +93,14 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setUsername(request.getUsername());
         user.setPassword(encodedPassword);
-        userRepository.save(user);
+        user = userRepository.save(user);
+        CreateUserResponse response = new CreateUserResponse(user);
+        return new GeneralResponse<>(
+                HttpStatus.OK.value(),
+                HttpStatus.OK.getReasonPhrase(),
+                "Usuario registrado correctamente",
+                response
+        );
     }
 
 }

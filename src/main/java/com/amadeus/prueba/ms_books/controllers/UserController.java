@@ -3,6 +3,8 @@ package com.amadeus.prueba.ms_books.controllers;
 import com.amadeus.prueba.ms_books.controllers.request.AuthRequest;
 import com.amadeus.prueba.ms_books.controllers.request.CreateUserRequest;
 import com.amadeus.prueba.ms_books.controllers.response.AuthResponse;
+import com.amadeus.prueba.ms_books.controllers.response.CreateUserResponse;
+import com.amadeus.prueba.ms_books.controllers.response.commons.GeneralResponse;
 import com.amadeus.prueba.ms_books.services.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,15 +35,20 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Token y refresh token generado"),
             @ApiResponse(responseCode = "401", description = "Usuario o refresh token invalido")
     })
-    public ResponseEntity<AuthResponse> users(@RequestBody @Valid AuthRequest request){
+    public ResponseEntity<GeneralResponse<AuthResponse>> users(@RequestBody @Valid AuthRequest request){
         try{
             return ResponseEntity
                     .ok(authService.auth(request));
         } catch (IllegalArgumentException e) {
-            AuthResponse errorResponse = new AuthResponse(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase(), e.getMessage(), null, null, null);
+            GeneralResponse<AuthResponse> response = new GeneralResponse<>(
+                    HttpStatus.UNAUTHORIZED.value(),
+                    HttpStatus.UNAUTHORIZED.getReasonPhrase(),
+                    e.getMessage(),
+                    null
+            );
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body(errorResponse);
+                    .body(response);
         }
     }
 
@@ -53,16 +58,20 @@ public class UserController {
             @ApiResponse(responseCode = "201", description = "Usuario creado"),
             @ApiResponse(responseCode = "500", description = "Error al crear el usuario")
     })
-    public ResponseEntity<?> users(@RequestBody @Valid CreateUserRequest request){
+    public ResponseEntity<GeneralResponse<CreateUserResponse>> users(@RequestBody @Valid CreateUserRequest request){
         try{
-            authService.createUser(request);
             return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .build();
+                    .ok(authService.createUser(request));
         }catch (IllegalArgumentException e){
+            GeneralResponse<CreateUserResponse> response = new GeneralResponse<>(
+                    HttpStatus.BAD_REQUEST.value(),
+                    HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                    e.getMessage(),
+                    null
+            );
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("Error: ", e.getMessage()));
+                    .body(response);
         }
     }
 

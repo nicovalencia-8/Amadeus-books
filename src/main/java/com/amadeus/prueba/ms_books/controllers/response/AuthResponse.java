@@ -8,10 +8,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class AuthResponse {
-    private int statusCode;
-    private String status;
-    private String message;
+
     private String accessToken;
     private String refreshToken;
     private Long expiresIn;
+
 }

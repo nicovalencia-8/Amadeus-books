@@ -1,5 +1,6 @@
-<div style="text-align: center; margin-top: 12px;">
-  <button mat-button color="primary" type="button"  (click)="goToCreateBook()">CrearLibro</button>
+<div class="botones">
+  <button mat-button color="primary" type="button"  (click)="goToCreateBook()">Crear Libro</button>
+  <button mat-button color="primary" type="button"  (click)="logout()">Cerrar Sesión</button>
 </div>
 <div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource">
@@ -37,6 +38,9 @@
         </button>
         <button mat-icon-button color="warn" (click)="onDelete(book)">
           <mat-icon>delete</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="onDetails(book)">
+          <mat-icon>visibility</mat-icon>
         </button>
       </td>
     </ng-container>

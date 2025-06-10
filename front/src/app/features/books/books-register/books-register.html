@@ -37,5 +37,8 @@
       </button>
     </form>
     <mat-error *ngIf="apiError">{{ apiError }}</mat-error>
+    <div style="text-align: center; margin-top: 12px;">
+      <button mat-button color="primary" type="button" (click)="goToBooks()">Volver</button>
+    </div>
   </mat-card-content>
 </mat-card>

@@ -51,6 +51,10 @@ export class BooksList {
     this.router.navigate(['/edit', book.id]);
   }
 
+  onDetails(book: Book) {
+    this.router.navigate(['/details', book.id]);
+  }
+
   onDelete(book: Book) {
     if (confirm(`¿Seguro que quieres eliminar el libro "${book.title}"?`)) {
       this.http.delete(`http://localhost:5227/books/${book.id}`).subscribe(() => {
@@ -61,6 +65,12 @@ export class BooksList {
 
   goToCreateBook(){
     this.router.navigate(['/create']);
+  }
+
+  logout(){
+    localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  this.router.navigate(['/login']);
   }
 
 }

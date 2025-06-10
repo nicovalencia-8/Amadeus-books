@@ -1,0 +1,6 @@
+.botones {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  gap: 18px;               /* Espacio entre los botones */
+  margin-top: 12px;
+}

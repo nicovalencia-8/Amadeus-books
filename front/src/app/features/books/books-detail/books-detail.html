@@ -1,1 +1,33 @@
-<p>books-detail works!</p>
+<mat-card class="card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Detalle Libro</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="full-width detalle-item">
+      <mat-icon color="primary">menu_book</mat-icon>
+      <span class="detalle-label">Título:</span>
+      <span class="detalle-valor">{{ book.title }}</span>
+    </div>
+    <div class="full-width detalle-item">
+      <mat-icon color="primary">person</mat-icon>
+      <span class="detalle-label">Autor:</span>
+      <span class="detalle-valor">{{ book.author }}</span>
+    </div>
+    <div class="full-width detalle-item">
+      <mat-icon color="primary">description</mat-icon>
+      <span class="detalle-label">Descripción:</span>
+      <span class="detalle-valor">{{ book.description }}</span>
+    </div>
+    <div class="full-width detalle-item">
+      <mat-icon color="primary">badge</mat-icon>
+      <span class="detalle-label">ISBN:</span>
+      <span class="detalle-valor">{{ book.isbn }}</span>
+    </div>
+    <div style="text-align: center; margin-top: 12px;">
+      <button mat-button color="primary" type="button" (click)="goToBooks()">Volver</button>
+    </div>
+    <div *ngIf="apiError" class="error-message">
+      {{ apiError }}
+    </div>
+  </mat-card-content>
+</mat-card>

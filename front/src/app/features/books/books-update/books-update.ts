@@ -103,4 +103,8 @@ export class BooksUpdate {
     });
   }
 
+  goToBooks() {
+    this.router.navigate(['/books']);
+  }
+
 }

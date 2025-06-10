@@ -74,4 +74,8 @@ export class BooksRegister {
     });
   }
 
+  goToBooks() {
+    this.router.navigate(['/books']);
+  }
+  
 }
